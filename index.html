@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="bw">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portfólio de Rafael Sacchetto — Estudante de TI com foco em Engenharia de Sistemas. Canal 01: transmissão retrô com alma de terminal dev.">
+  <meta name="author" content="Rafael Sacchetto">
+  
+  <title>Rafael Sacchetto // Canal 01 — Portfólio</title>
+  
+  <!-- Estilos principais do sistema -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Import map para Three.js via CDN (versão fixada 0.160.0) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+
+  <!-- GSAP e ScrollTrigger para animações físicas e scroll reveals -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+  <!-- ========================================================================
+       CABEÇALHO FIXO (HEADER)
+       ======================================================================== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <!-- Identidade e Canal -->
+      <a href="#hero" class="header-brand" aria-label="Rafael Sacchetto - Página Inicial">
+        <span class="brand-channel">[CANAL 01]</span>
+        <span class="brand-name">RAFAEL SACCHETTO</span>
+      </a>
+
+      <!-- Menu de Navegação Semântico -->
+      <nav class="header-nav" aria-label="Navegação Principal">
+        <ul class="nav-list">
+          <li><a href="#sobre" class="nav-link">[01 SOBRE]</a></li>
+          <li><a href="#projetos" class="nav-link">[02 PROJETOS]</a></li>
+          <li><a href="#competencias" class="nav-link">[03 COMPETÊNCIAS]</a></li>
+          <li><a href="#player" class="nav-link">[04 ÁUDIO]</a></li>
+          <li><a href="#palestras" class="nav-link">[05 PALESTRAS]</a></li>
+          <li><a href="#contato" class="nav-link">[06 CONTATO]</a></li>
+        </ul>
+      </nav>
+
+      <!-- Painel de Controles e Telemetria Retrô -->
+      <div class="header-controls">
+        <!-- Relógio ao vivo fuso Campinas, SP -->
+        <div class="live-clock-widget" title="Horário oficial de Campinas, SP (UTC-3)">
+          <span class="live-indicator" aria-hidden="true"></span>
+          <span>CAMPINAS:</span>
+          <time id="live-clock">--:--:--</time>
+        </div>
+
+        <!-- Alternador Preto & Branco vs Paleta Anos 50 -->
+        <button id="theme-toggle-btn" class="ctrl-btn" type="button" aria-label="Alternar paleta de cores">
+          P&B <span class="toggle-status">[ON]</span>
+        </button>
+
+        <!-- Controle de som (Desligado por padrão, ativo na Fase 3) -->
+        <button id="sound-toggle-btn" class="ctrl-btn" type="button" title="Controle de Som analógico">
+          SOM <span class="badge-notice">[OFF]</span>
+        </button>
+
+        <!-- Alternador de idioma (Fase 4) -->
+        <button id="lang-toggle-btn" class="ctrl-btn" type="button" title="Alternar idioma">
+          PT <span class="badge-notice">/ EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CONTEÚDO PRINCIPAL
+       ======================================================================== -->
+  <main id="main" class="main-content" role="main">
+
+    <!-- ----------------------------------------------------------------------
+         HERO: OBJETO ANALÓGICO + TIPOGRAFIA GIGANTE + FAIXA INFINITA
+         ---------------------------------------------------------------------- -->
+    <section id="hero" class="section hero-section" aria-label="Abertura da transmissão">
+      <div class="container hero-content">
+        <!-- Coluna de Texto e Apresentação -->
+        <div class="hero-text-col">
+          <div class="hero-transmission-tag">
+            <span>[FREQ: 101.9 MHz // TRANSMISSÃO 1950-DEV // CAMPINAS, SP]</span>
+          </div>
+
+          <h1 class="hero-main-title" aria-label="Rafael Sacchetto">
+            <span class="hero-word hero-word-first"><span class="intro-letter">R</span><span class="intro-letter">A</span><span class="intro-letter">F</span><span class="intro-letter">A</span><span class="intro-letter">E</span><span class="intro-letter">L</span></span><span class="hero-word-space"> </span><span class="hero-word hero-word-second"><span class="intro-letter">S</span><span class="intro-letter">A</span><span class="intro-letter">C</span><span class="intro-letter">C</span><span class="intro-letter">H</span><span class="intro-letter">E</span><span class="intro-letter">T</span><span class="intro-letter">T</span><span class="intro-letter">O</span></span>
+          </h1>
+
+          <p class="hero-description">
+            Estudante de TI com foco em Engenharia de Sistemas. Construindo bases sólidas em lógica de programação, arquitetura de sistemas, Linux e redes de computadores.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#projetos" class="btn-primary">EXPLORAR PROJETOS [02]</a>
+            <a href="#contato" class="btn-secondary">SINTONIZAR CONTATO [06]</a>
+          </div>
+        </div>
+
+        <!-- Coluna Visual: Objeto 3D Fita Cassete em ASCII (Three.js Requisito Firme) -->
+        <div class="hero-visual-col">
+          <div class="hero-visual-card" id="ascii-hero-wrap">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+                <span class="terminal-dot"></span>
+              </div>
+              <span>THREE.JS ASCII RENDERER // 3D TAPE DECK</span>
+            </div>
+
+            <!-- Canvas de Texto ASCII interativo em tempo real -->
+            <pre class="ascii-frame" id="ascii-canvas" aria-label="Fita cassete 3D interativa renderizada em arte ASCII em tempo real">
+Carregando renderizador ASCII 3D...
+            </pre>
+
+            <p class="ascii-notice">
+              [FITA 3D RENDERIZADA EM ASCII // GIRE COM O MOUSE // HOVER ACELERA]
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Faixa Infinita de Texto (Ticker Retrô) -->
+      <div class="hero-marquee-wrap" aria-hidden="true">
+        <div class="hero-marquee-track">
+          <span class="marquee-item">ESTUDANTE DE TI</span>
+          <span class="marquee-item">CAMPINAS, SP</span>
+          <span class="marquee-item">BACKEND PYTHON</span>
+          <span class="marquee-item">LINUX (I USE CACHYOS BTW)</span>
+          <span class="marquee-item">ENGENHARIA DE SISTEMAS</span>
+          <span class="marquee-item">REDES & SUB-REDES</span>
+          <span class="marquee-item">METODOLOGIAS ÁGEIS</span>
+          <span class="marquee-item">CANAL 01 TRANSMISSÃO ATIVA</span>
+          <span class="marquee-item">ABERTO A OPORTUNIDADES</span>
+          <!-- Repetição para fluxo infinito contínuo -->
+          <span class="marquee-item">ESTUDANTE DE TI</span>
+          <span class="marquee-item">CAMPINAS, SP</span>
+          <span class="marquee-item">BACKEND PYTHON</span>
+          <span class="marquee-item">LINUX (I USE CACHYOS BTW)</span>
+          <span class="marquee-item">ENGENHARIA DE SISTEMAS</span>
+          <span class="marquee-item">REDES & SUB-REDES</span>
+          <span class="marquee-item">METODOLOGIAS ÁGEIS</span>
+          <span class="marquee-item">CANAL 01 TRANSMISSÃO ATIVA</span>
+          <span class="marquee-item">ABERTO A OPORTUNIDADES</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         01 SOBRE: BIOGRAFIA + FORMAÇÃO + IDIOMAS
+         ---------------------------------------------------------------------- -->
+    <section id="sobre" class="section" aria-labelledby="sobre-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[01 // TRANSMISSÃO BIOGRÁFICA]</span>
+          <h2 id="sobre-title" class="section-title">SOBRE MIM</h2>
+          <p class="section-subtitle">
+            Estudante dedicado a compreender o funcionamento de sistemas desde os fundamentos de hardware e redes até a programação backend.
+          </p>
+        </header>
+
+        <div class="about-grid">
+          <!-- Texto Biográfico Real -->
+          <div class="about-bio-panel">
+            <p class="about-bio-text">
+              Estudante de TI com um ano e meio de curso. Objetivo: me introduzir no mercado e aprimorar meus conhecimentos, especificamente em <strong>Engenharia de Sistemas</strong>.
+            </p>
+            <p class="about-bio-text">
+              Busco oportunidades para aplicar na prática o que desenvolvi, acompanhando as tendências do setor e atuando com responsabilidade técnica e disciplina de estudo.
+            </p>
+            <p class="about-bio-text">
+              Residente em <strong>Campinas, SP</strong>, com foco no aprendizado contínuo de arquitetura computacional, sistemas operacionais e desenvolvimento de software estruturado.
+            </p>
+          </div>
+
+          <!-- Fichas Técnicas Numeradas: Formação e Idiomas -->
+          <div class="about-specs">
+            <!-- 1.1 Formação -->
+            <article class="spec-block">
+              <div class="spec-header">
+                <span class="spec-number">[1.1]</span>
+                <span class="spec-tag">[FORMAÇÃO ACADÊMICA]</span>
+              </div>
+              <h3 class="spec-title">CURSO TÉCNICO EM INFORMÁTICA</h3>
+              <p class="spec-institution">Instituto Educacional Raphael Di Santo</p>
+              <p class="spec-period">Início 2025 — Previsão de conclusão 2027</p>
+              <span class="spec-status-badge">STATUS: CURSANDO (1 ANO E MEIO DE CURSO)</span>
+            </article>
+
+            <!-- 1.2 Idiomas -->
+            <article class="spec-block">
+              <div class="spec-header">
+                <span class="spec-number">[1.2]</span>
+                <span class="spec-tag">[COMUNICAÇÃO & IDIOMAS]</span>
+              </div>
+              <h3 class="spec-title">IDIOMAS</h3>
+              <ul class="lang-list">
+                <li class="lang-item">
+                  <span class="lang-name">Português</span>
+                  <span class="lang-level">[NATIVO]</span>
+                </li>
+                <li class="lang-item">
+                  <span class="lang-name">Inglês</span>
+                  <span class="lang-level">[FLUENTE]</span>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         02 PROJETOS: FITAS CASSETE ANALÓGICAS
+         ---------------------------------------------------------------------- -->
+    <section id="projetos" class="section" aria-labelledby="projetos-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[02 // ARQUIVO ANALÓGICO EM FITA]</span>
+          <h2 id="projetos-title" class="section-title">PROJETOS SELECIONADOS</h2>
+          <p class="section-subtitle">
+            Projetos práticos desenvolvidos com foco em lógica, arquitetura e controle de sistemas.
+          </p>
+        </header>
+
+        <!-- Barra de Navegação Horizontal das Fitas (Side-Scroll #1) -->
+        <div class="tapes-navigation-bar">
+          <div class="tape-nav-controls">
+            <button id="prev-tape-btn" class="ctrl-btn tape-nav-btn" type="button" aria-label="Ver fita anterior">
+              ◀ [FITA ANTERIOR]
+            </button>
+            <button id="next-tape-btn" class="ctrl-btn tape-nav-btn" type="button" aria-label="Ver próxima fita">
+              [PRÓXIMA FITA] ▶
+            </button>
+          </div>
+          <span id="tape-counter-indicator" class="tape-counter-badge">FITA [01 / 02]</span>
+        </div>
+
+        <div class="tapes-track">
+          <div class="tapes-grid">
+          <!-- Fita 01: Jogo Python + JSON -->
+          <article class="cassette-card" id="fita-01" tabindex="0" role="region" aria-label="Fita do projeto Jogo de Console em Python">
+            <span class="screw screw-tl"></span>
+            <span class="screw screw-tr"></span>
+            <span class="screw screw-bl"></span>
+            <span class="screw screw-br"></span>
+
+            <div class="cassette-label">
+              <div class="cassette-meta">
+                <span>[FITA #01]</span>
+                <span>[LADO A]</span>
+                <span>TYPE I // NORMAL EQ</span>
+              </div>
+              <h3 class="cassette-title">Jogo de Console em Python com Tabelas JSON</h3>
+              <span class="cassette-category">Backend & Lógica Estruturada</span>
+            </div>
+
+            <!-- Janela de visualização da fita magnética com carretéis mecânicos visíveis -->
+            <div class="cassette-window" aria-hidden="true">
+              <div class="tape-reel tape-reel-left">
+                <svg class="reel-cog reel-cog-left" viewBox="0 0 44 44" width="44" height="44">
+                  <!-- Carretel externo -->
+                  <circle cx="22" cy="22" r="20" fill="var(--tape-reel-bg)" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- 6 raios mecânicos de alto contraste -->
+                  <line x1="22" y1="2" x2="22" y2="42" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="12" x2="39.3" y2="32" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="32" x2="39.3" y2="12" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <!-- Núcleo interno com furos de tração -->
+                  <circle cx="22" cy="22" r="8" fill="#111111" stroke="#ffffff" stroke-width="2" />
+                  <rect x="20.5" y="8" width="3" height="5" fill="#ffffff" />
+                  <rect x="20.5" y="31" width="3" height="5" fill="#ffffff" />
+                  <rect x="8" y="20.5" width="5" height="3" fill="#ffffff" />
+                  <rect x="31" y="20.5" width="5" height="3" fill="#ffffff" />
+                </svg>
+              </div>
+              
+              <div class="tape-film-bridge"></div>
+              
+              <div class="tape-reel tape-reel-right">
+                <svg class="reel-cog reel-cog-right" viewBox="0 0 44 44" width="44" height="44">
+                  <!-- Carretel externo -->
+                  <circle cx="22" cy="22" r="20" fill="var(--tape-reel-bg)" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- 6 raios mecânicos de alto contraste -->
+                  <line x1="22" y1="2" x2="22" y2="42" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="12" x2="39.3" y2="32" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="32" x2="39.3" y2="12" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <!-- Núcleo interno com furos de tração -->
+                  <circle cx="22" cy="22" r="8" fill="#111111" stroke="#ffffff" stroke-width="2" />
+                  <rect x="20.5" y="8" width="3" height="5" fill="#ffffff" />
+                  <rect x="20.5" y="31" width="3" height="5" fill="#ffffff" />
+                  <rect x="8" y="20.5" width="5" height="3" fill="#ffffff" />
+                  <rect x="31" y="20.5" width="5" height="3" fill="#ffffff" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="cassette-deck-bar">
+              <button type="button" class="cassette-deck-btn" aria-label="Engatar fita no deck e rodar em velocidade máxima">
+                [TOCAR NO DECK // ACELERAR FITA]
+              </button>
+              <span class="tape-deck-status">MODO: REPOUSO (ROTAÇÃO CONTÍNUA)</span>
+            </div>
+
+            <div class="cassette-body">
+              <p class="cassette-desc">
+                Projeto desenvolvido em Python no terminal explorando estruturação lógica através de funções modulares e integração com tabelas em arquivos JSON para persistência de dados.
+              </p>
+              <ul class="cassette-highlights">
+                <li>Lógica de programação pura e controle de fluxo</li>
+                <li>Modularização do código em funções especializadas</li>
+                <li>Integração Python + manipulação e leitura de arquivos JSON</li>
+                <li>Modelagem e persistência de dados: jogador, catálogo de inimigos e itens</li>
+              </ul>
+              <div class="cassette-tags">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">JSON</span>
+                <span class="tech-tag">CLI / Console</span>
+                <span class="tech-tag">Lógica Estruturada</span>
+              </div>
+              <a href="#placeholder-github-jogo-python" class="cassette-link">
+                [VER CÓDIGO NO GITHUB — PLACEHOLDER]
+              </a>
+            </div>
+          </article>
+
+          <!-- Fita 02: Ambiente Linux + CachyOS -->
+          <article class="cassette-card" id="fita-02" tabindex="0" role="region" aria-label="Fita do projeto Ambiente Linux">
+            <span class="screw screw-tl"></span>
+            <span class="screw screw-tr"></span>
+            <span class="screw screw-bl"></span>
+            <span class="screw screw-br"></span>
+
+            <div class="cassette-label">
+              <div class="cassette-meta">
+                <span>[FITA #02]</span>
+                <span>[LADO B]</span>
+                <span>TYPE II // HIGH BIAS</span>
+              </div>
+              <h3 class="cassette-title">Ambiente Linux: Setup & Otimização CachyOS</h3>
+              <span class="cassette-category">Sistemas Operacionais & Hardware</span>
+            </div>
+
+            <!-- Janela de visualização da fita magnética com carretéis mecânicos visíveis -->
+            <div class="cassette-window" aria-hidden="true">
+              <div class="tape-reel tape-reel-left">
+                <svg class="reel-cog reel-cog-left" viewBox="0 0 44 44" width="44" height="44">
+                  <!-- Carretel externo -->
+                  <circle cx="22" cy="22" r="20" fill="var(--tape-reel-bg)" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- 6 raios mecânicos de alto contraste -->
+                  <line x1="22" y1="2" x2="22" y2="42" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="12" x2="39.3" y2="32" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="32" x2="39.3" y2="12" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <!-- Núcleo interno com furos de tração -->
+                  <circle cx="22" cy="22" r="8" fill="#111111" stroke="#ffffff" stroke-width="2" />
+                  <rect x="20.5" y="8" width="3" height="5" fill="#ffffff" />
+                  <rect x="20.5" y="31" width="3" height="5" fill="#ffffff" />
+                  <rect x="8" y="20.5" width="5" height="3" fill="#ffffff" />
+                  <rect x="31" y="20.5" width="5" height="3" fill="#ffffff" />
+                </svg>
+              </div>
+              
+              <div class="tape-film-bridge"></div>
+              
+              <div class="tape-reel tape-reel-right">
+                <svg class="reel-cog reel-cog-right" viewBox="0 0 44 44" width="44" height="44">
+                  <!-- Carretel externo -->
+                  <circle cx="22" cy="22" r="20" fill="var(--tape-reel-bg)" stroke="#ffffff" stroke-width="2.5" />
+                  <!-- 6 raios mecânicos de alto contraste -->
+                  <line x1="22" y1="2" x2="22" y2="42" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="12" x2="39.3" y2="32" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <line x1="4.7" y1="32" x2="39.3" y2="12" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+                  <!-- Núcleo interno com furos de tração -->
+                  <circle cx="22" cy="22" r="8" fill="#111111" stroke="#ffffff" stroke-width="2" />
+                  <rect x="20.5" y="8" width="3" height="5" fill="#ffffff" />
+                  <rect x="20.5" y="31" width="3" height="5" fill="#ffffff" />
+                  <rect x="8" y="20.5" width="5" height="3" fill="#ffffff" />
+                  <rect x="31" y="20.5" width="5" height="3" fill="#ffffff" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="cassette-deck-bar">
+              <button type="button" class="cassette-deck-btn" aria-label="Engatar fita no deck e rodar em velocidade máxima">
+                [TOCAR NO DECK // ACELERAR FITA]
+              </button>
+              <span class="tape-deck-status">MODO: REPOUSO (ROTAÇÃO CONTÍNUA)</span>
+            </div>
+
+            <div class="cassette-body">
+              <p class="cassette-desc">
+                Construção e customização de um ambiente de trabalho Linux de alta performance para uso diário, partindo da preparação física da mídia até o ajuste fino de drivers de hardware.
+              </p>
+              <ul class="cassette-highlights">
+                <li>Criação de pendrive de instalação multi-boot com Ventoy</li>
+                <li>Particionamento avançado e estruturação de tabelas com GParted</li>
+                <li>Instalação da distribuição CachyOS (alta performance base Arch)</li>
+                <li>Configuração e afinação de pacotes essenciais e drivers de dispositivos</li>
+              </ul>
+              <div class="cassette-tags">
+                <span class="tech-tag">Linux</span>
+                <span class="tech-tag">CachyOS</span>
+                <span class="tech-tag">Ventoy</span>
+                <span class="tech-tag">GParted</span>
+                <span class="tech-tag">Kernel & Drivers</span>
+              </div>
+              <a href="#placeholder-github-ambiente-linux" class="cassette-link">
+                [VER DOCUMENTAÇÃO TÉCNICA — PLACEHOLDER]
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ----------------------------------------------------------------------
+         03 COMPETÊNCIAS: FICHA TÉCNICA NUMERADA ESTILO OBYS
+         ---------------------------------------------------------------------- -->
+    <section id="competencias" class="section" aria-labelledby="competencias-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[03 // ESPECIFICAÇÕES TÉCNICAS]</span>
+          <h2 id="competencias-title" class="section-title">MATRIZ DE COMPETÊNCIAS</h2>
+          <p class="section-subtitle">
+            Habilidades técnicas estruturadas por disciplina com foco em engenharia e execução prática.
+          </p>
+        </header>
+
+        <div class="skills-grid">
+          <!-- 1.1 Programação -->
+          <article class="skill-category-card">
+            <div class="skill-card-top">
+              <span class="skill-index">[1.1]</span>
+              <!-- Relógio Analógico 1 a 12 com pivô central fixo -->
+              <div class="analog-clock" aria-label="Relógio analógico indicador de competências">
+                <svg class="clock-dial-face" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <!-- Marcadores das 12 horas -->
+                  <line x1="50" y1="4" x2="50" y2="12" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="73" y1="10.2" x2="69" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="89.8" y1="27" x2="82.9" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="96" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="89.8" y1="73" x2="82.9" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="73" y1="89.8" x2="69" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="50" y1="96" x2="50" y2="88" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="27" y1="89.8" x2="31" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="10.2" y1="73" x2="17.1" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="4" y1="50" x2="12" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="10.2" y1="27" x2="17.1" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="27" y1="10.2" x2="31" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <!-- Números de 1 a 12 perfeitamente distribuídos ao redor do centro 50/50 -->
+                  <text x="50" y="21" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">12</text>
+                  <text x="64.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">1</text>
+                  <text x="75" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">2</text>
+                  <text x="79" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">3</text>
+                  <text x="75" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">4</text>
+                  <text x="64.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">5</text>
+                  <text x="50" y="79" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">6</text>
+                  <text x="35.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">7</text>
+                  <text x="25" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">8</text>
+                  <text x="21" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">9</text>
+                  <text x="25" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">10</text>
+                  <text x="35.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">11</text>
+                </svg>
+                <!-- 1. WRAPPER do ponteiro -->
+                <div class="hand-wrapper">
+                  <!-- 2. Ponteiro visível -->
+                  <div class="hand-needle"></div>
+                </div>
+                <!-- Ponto central fixo -->
+                <div class="clock-center-pin"></div>
+              </div>
+            </div>
+            <h3 class="skill-category-title">PROGRAMAÇÃO</h3>
+            <ul class="skill-items-list">
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Backend com Python</h4>
+                <p class="skill-item-desc">Desenvolvimento de lógica de negócios, scripts, persistência em arquivos JSON e automação.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Java (Básico)</h4>
+                <p class="skill-item-desc">Fundamentos de sintaxe, tipos de dados e conceitos iniciais de orientação a objetos.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Frontend (HTML / CSS / JS)</h4>
+                <p class="skill-item-desc">Construção de interfaces semânticas, estilização moderna e manipulação do DOM.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">MySQL</h4>
+                <p class="skill-item-desc">Modelagem relacional de tabelas, consultas SQL estruturadas e integridade de dados.</p>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 1.2 Ferramentas -->
+          <article class="skill-category-card">
+            <div class="skill-card-top">
+              <span class="skill-index">[1.2]</span>
+              <!-- Relógio Analógico 1 a 12 com pivô central fixo -->
+              <div class="analog-clock" aria-label="Relógio analógico indicador de competências">
+                <svg class="clock-dial-face" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <!-- Marcadores das 12 horas -->
+                  <line x1="50" y1="4" x2="50" y2="12" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="73" y1="10.2" x2="69" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="89.8" y1="27" x2="82.9" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="96" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="89.8" y1="73" x2="82.9" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="73" y1="89.8" x2="69" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="50" y1="96" x2="50" y2="88" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="27" y1="89.8" x2="31" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="10.2" y1="73" x2="17.1" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="4" y1="50" x2="12" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="10.2" y1="27" x2="17.1" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="27" y1="10.2" x2="31" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <!-- Números de 1 a 12 perfeitamente distribuídos ao redor do centro 50/50 -->
+                  <text x="50" y="21" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">12</text>
+                  <text x="64.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">1</text>
+                  <text x="75" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">2</text>
+                  <text x="79" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">3</text>
+                  <text x="75" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">4</text>
+                  <text x="64.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">5</text>
+                  <text x="50" y="79" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">6</text>
+                  <text x="35.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">7</text>
+                  <text x="25" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">8</text>
+                  <text x="21" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">9</text>
+                  <text x="25" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">10</text>
+                  <text x="35.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">11</text>
+                </svg>
+                <!-- 1. WRAPPER do ponteiro -->
+                <div class="hand-wrapper">
+                  <!-- 2. Ponteiro visível -->
+                  <div class="hand-needle"></div>
+                </div>
+                <!-- Ponto central fixo -->
+                <div class="clock-center-pin"></div>
+              </div>
+            </div>
+            <h3 class="skill-category-title">FERRAMENTAS</h3>
+            <ul class="skill-items-list">
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">VSCode</h4>
+                <p class="skill-item-desc">Editor principal com configuração de ambiente, extensões e atalhos de produtividade.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">GitHub</h4>
+                <p class="skill-item-desc">Controle de versão, fluxo de commits, ramificação e documentação de projetos.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">MySQL Workbench</h4>
+                <p class="skill-item-desc">Administração visual de bancos de dados relacionais e execução de scripts SQL.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Cisco Packet Tracer</h4>
+                <p class="skill-item-desc">Modelagem de redes, roteamento e testes de conectividade em topologias simuladas.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Oracle VM VirtualBox</h4>
+                <p class="skill-item-desc">Virtualização de sistemas operacionais para testes em ambientes isolados.</p>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 1.3 Sistemas e Redes -->
+          <article class="skill-category-card">
+            <div class="skill-card-top">
+              <span class="skill-index">[1.3]</span>
+              <!-- Relógio Analógico 1 a 12 com pivô central fixo -->
+              <div class="analog-clock" aria-label="Relógio analógico indicador de competências">
+                <svg class="clock-dial-face" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <!-- Marcadores das 12 horas -->
+                  <line x1="50" y1="4" x2="50" y2="12" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="73" y1="10.2" x2="69" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="89.8" y1="27" x2="82.9" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="96" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="89.8" y1="73" x2="82.9" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="73" y1="89.8" x2="69" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="50" y1="96" x2="50" y2="88" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="27" y1="89.8" x2="31" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="10.2" y1="73" x2="17.1" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="4" y1="50" x2="12" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="10.2" y1="27" x2="17.1" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="27" y1="10.2" x2="31" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <!-- Números de 1 a 12 perfeitamente distribuídos ao redor do centro 50/50 -->
+                  <text x="50" y="21" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">12</text>
+                  <text x="64.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">1</text>
+                  <text x="75" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">2</text>
+                  <text x="79" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">3</text>
+                  <text x="75" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">4</text>
+                  <text x="64.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">5</text>
+                  <text x="50" y="79" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">6</text>
+                  <text x="35.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">7</text>
+                  <text x="25" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">8</text>
+                  <text x="21" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">9</text>
+                  <text x="25" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">10</text>
+                  <text x="35.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">11</text>
+                </svg>
+                <!-- 1. WRAPPER do ponteiro -->
+                <div class="hand-wrapper">
+                  <!-- 2. Ponteiro visível -->
+                  <div class="hand-needle"></div>
+                </div>
+                <!-- Ponto central fixo -->
+                <div class="clock-center-pin"></div>
+              </div>
+            </div>
+            <h3 class="skill-category-title">SISTEMAS & REDES</h3>
+            <ul class="skill-items-list">
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Modelagem de Redes</h4>
+                <p class="skill-item-desc">Compreensão de topologias de rede, arquitetura cliente-servidor e protocolos fundamentais.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Cálculo de Sub-redes</h4>
+                <p class="skill-item-desc">Dimensionamento de redes IPv4, máscaras de rede CIDR e cálculo de faixas utilizáveis.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Gerenciamento de Disco</h4>
+                <p class="skill-item-desc">Particionamento, tabelas GPT/MBR, formatação e manipulação de partições via GParted.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Atualização de Firmware</h4>
+                <p class="skill-item-desc">Manutenção preventiva, procedimentos de atualização de BIOS/UEFI e drivers de sistema.</p>
+              </li>
+            </ul>
+          </article>
+
+          <!-- 1.4 Gestão de Projetos -->
+          <article class="skill-category-card">
+            <div class="skill-card-top">
+              <span class="skill-index">[1.4]</span>
+              <!-- Relógio Analógico 1 a 12 com pivô central fixo -->
+              <div class="analog-clock" aria-label="Relógio analógico indicador de competências">
+                <svg class="clock-dial-face" viewBox="0 0 100 100" aria-hidden="true">
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.5" />
+                  <!-- Marcadores das 12 horas -->
+                  <line x1="50" y1="4" x2="50" y2="12" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="73" y1="10.2" x2="69" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="89.8" y1="27" x2="82.9" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="96" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="89.8" y1="73" x2="82.9" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="73" y1="89.8" x2="69" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="50" y1="96" x2="50" y2="88" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="27" y1="89.8" x2="31" y2="82.9" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="10.2" y1="73" x2="17.1" y2="69" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="4" y1="50" x2="12" y2="50" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                  <line x1="10.2" y1="27" x2="17.1" y2="31" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <line x1="27" y1="10.2" x2="31" y2="17.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  <!-- Números de 1 a 12 perfeitamente distribuídos ao redor do centro 50/50 -->
+                  <text x="50" y="21" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">12</text>
+                  <text x="64.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">1</text>
+                  <text x="75" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">2</text>
+                  <text x="79" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">3</text>
+                  <text x="75" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">4</text>
+                  <text x="64.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">5</text>
+                  <text x="50" y="79" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">6</text>
+                  <text x="35.5" y="75" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">7</text>
+                  <text x="25" y="64.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">8</text>
+                  <text x="21" y="50" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">9</text>
+                  <text x="25" y="35.5" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">10</text>
+                  <text x="35.5" y="25" font-size="7" text-anchor="middle" dominant-baseline="central" font-family="'Space Mono', monospace" font-weight="700" fill="currentColor">11</text>
+                </svg>
+                <!-- 1. WRAPPER do ponteiro -->
+                <div class="hand-wrapper">
+                  <!-- 2. Ponteiro visível -->
+                  <div class="hand-needle"></div>
+                </div>
+                <!-- Ponto central fixo -->
+                <div class="clock-center-pin"></div>
+              </div>
+            </div>
+            <h3 class="skill-category-title">GESTÃO DE PROJETOS</h3>
+            <ul class="skill-items-list">
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Histórias de Usuário</h4>
+                <p class="skill-item-desc">Mapeamento de necessidades dos usuários em critérios de aceitação e valor funcional.</p>
+              </li>
+              <li class="skill-item-block">
+                <h4 class="skill-item-title">Metodologias Ágeis</h4>
+                <p class="skill-item-desc">Noções práticas dos princípios de Scrum e Kanban para organização contínua de tarefas.</p>
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         04 PLAYER ANALÓGICO: VINIL & CONTROLES (REQUISITO FIRME 6.4)
+         ---------------------------------------------------------------------- -->
+    <section id="player" class="section" aria-labelledby="player-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[04 // TRANSMISSÃO DE ÁUDIO]</span>
+          <h2 id="player-title" class="section-title">ESTAÇÃO DE VOZ</h2>
+          <p class="section-subtitle">
+            Toca-discos analógico: o vinil gira, o braço mecânico posiciona na trilha e o áudio toca de verdade com visualizador VU em tempo real.
+          </p>
+        </header>
+
+        <div class="player-container">
+          <div class="player-body">
+            <!-- Representação visual do Vinil com Braço Físico -->
+            <div class="vinyl-deck" aria-hidden="true">
+              <div class="vinyl-record">
+                <div class="vinyl-center-label">
+                  <span>CANAL 01</span>
+                  <span>33 RPM</span>
+                  <div class="vinyl-spindle"></div>
+                </div>
+              </div>
+              <div class="tone-arm">
+                <div class="tone-head"></div>
+              </div>
+            </div>
+
+            <!-- Painel de Reprodução e VU Meter -->
+            <div class="player-controls-panel">
+              <div class="player-track-info">
+                <div class="player-status-tag">[FAIXA 01 // FREQUÊNCIA REGISTRADA — CLIQUE PARA TOCAR]</div>
+                <h3 class="player-track-name">Mensagem de Apresentação — Rafael Sacchetto</h3>
+              </div>
+
+              <!-- VU Meter Analógico Retrô que reage ao áudio -->
+              <div class="vu-meter-wrap" aria-hidden="true">
+                <span class="vu-label">VU METER:</span>
+                <div class="vu-bars">
+                  <span class="vu-bar active-green"></span>
+                  <span class="vu-bar active-green"></span>
+                  <span class="vu-bar active-green"></span>
+                  <span class="vu-bar active-green"></span>
+                  <span class="vu-bar active-yellow"></span>
+                  <span class="vu-bar active-yellow"></span>
+                  <span class="vu-bar active-red"></span>
+                  <span class="vu-bar"></span>
+                  <span class="vu-bar"></span>
+                </div>
+              </div>
+
+              <!-- Barra de Controles Interativos -->
+              <div class="playback-bar">
+                <button id="player-play-btn" class="btn-player" type="button" aria-label="Tocar ou pausar áudio">
+                  ▶ REPRODUZIR ÁUDIO
+                </button>
+                <div class="timecode-display">
+                  <span>TIMECODE: 00:00 / 01:24</span>
+                </div>
+                <div class="volume-control-wrap">
+                  <label for="player-volume-slider">VOL:</label>
+                  <input type="range" id="player-volume-slider" class="volume-slider" min="0" max="1" step="0.05" value="0.8" aria-label="Controle de volume do áudio">
+                </div>
+              </div>
+
+              <p class="player-notice">
+                [ÁUDIO REAL: toca /assets/audio/minha-faixa.mp3 quando inserido, com gerador analógico Web Audio integrado]
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         05 PALESTRAS & VISITAS TÉCNICAS (APENAS TEXTO, SEM VÍDEO)
+         ---------------------------------------------------------------------- -->
+    <section id="palestras" class="section" aria-labelledby="palestras-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[05 // REGISTROS DE CAMPO]</span>
+          <h2 id="palestras-title" class="section-title">PALESTRAS & VISITAS TÉCNICAS</h2>
+          <p class="section-subtitle">
+            Participação ativa em palestras no Colégio Raphael Di Santo e visita técnica aos laboratórios da Unicamp. Registros puramente textuais.
+          </p>
+        </header>
+
+        <!-- Barra de controle de mesa retrô -->
+        <div class="lectures-top-bar">
+          <span class="lectures-drag-hint">✦ ARRASTE OS TELEGRAMAS LIVREMENTE PELA MESA // CLIQUE E ARRASTE</span>
+          <button id="reset-lectures-btn" class="ctrl-btn reset-lectures-btn" type="button" aria-label="Organizar telegramas de volta à mesa">
+            [ORGANIZAR MESA]
+          </button>
+        </div>
+
+        <!-- Grade 100% textual com as 4 palestras / visitas -->
+        <div class="lectures-grid">
+          <article class="lecture-card">
+            <div class="lecture-card-header">
+              <span class="lecture-badge">[REGISTRO 01]</span>
+              <span class="lecture-stamp">[PALESTRA TÉCNICA]</span>
+            </div>
+            <h3 class="lecture-title">Product Owner</h3>
+            <p class="lecture-host">Colégio Raphael Di Santo</p>
+            <p class="lecture-desc">
+              Palestra focada em papéis de liderança de produto, priorização estratégica de demandas e ponte de comunicação entre área de negócios e engenharia de software.
+            </p>
+          </article>
+
+          <article class="lecture-card">
+            <div class="lecture-card-header">
+              <span class="lecture-badge">[REGISTRO 02]</span>
+              <span class="lecture-stamp">[VISITA ACADÊMICA]</span>
+            </div>
+            <h3 class="lecture-title">Visita Técnica e Palestra na Unicamp</h3>
+            <p class="lecture-host">Universidade Estadual de Campinas (Unicamp)</p>
+            <p class="lecture-desc">
+              Imersão prática nos laboratórios de computação da Unicamp, conhecendo projetos de pesquisa, servidores de alta performance e infraestrutura acadêmica de ponta.
+            </p>
+          </article>
+
+          <article class="lecture-card">
+            <div class="lecture-card-header">
+              <span class="lecture-badge">[REGISTRO 03]</span>
+              <span class="lecture-stamp">[TELECOMUNICAÇÕES]</span>
+            </div>
+            <h3 class="lecture-title">Representante da Faculdade Inatel</h3>
+            <p class="lecture-host">Instituto Nacional de Telecomunicações (Inatel)</p>
+            <p class="lecture-desc">
+              Palestra sobre o panorama de Engenharia de Telecomunicações, redes móveis, Internet das Coisas (IoT) e tendências tecnológicas do mercado.
+            </p>
+          </article>
+
+          <article class="lecture-card">
+            <div class="lecture-card-header">
+              <span class="lecture-badge">[REGISTRO 04]</span>
+              <span class="lecture-stamp">[ARQUITETURA TI]</span>
+            </div>
+            <h3 class="lecture-title">Arquiteto de Sistemas</h3>
+            <p class="lecture-host">Colégio Raphael Di Santo</p>
+            <p class="lecture-desc">
+              Palestra dedicada ao desenho de arquiteturas robustas, desacoplamento de serviços, segurança, escalabilidade e padrões de engenharia em sistemas modernos.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ----------------------------------------------------------------------
+         06 CONTATO: TORRADEIRA ANOS 50 + DADOS REAIS DE CONTATO
+         ---------------------------------------------------------------------- -->
+    <section id="contato" class="section" aria-labelledby="contato-title">
+      <div class="container">
+        <header class="section-header">
+          <span class="section-badge">[06 // FIM DE TRANSMISSÃO]</span>
+          <h2 id="contato-title" class="section-title">VAMOS CONVERSAR?</h2>
+          <p class="section-subtitle">
+            Canais diretos para contato sobre oportunidades profissionais, estágio em TI ou Engenharia de Sistemas.
+          </p>
+        </header>
+
+        <div class="contact-container">
+          <!-- Torradeira Anos 50 Ilustrada em SVG Puro -->
+          <div class="toaster-showcase">
+            <div class="toaster-art">
+              <svg viewBox="0 0 200 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de uma torradeira vintage anos 50">
+                <!-- Fatia de Pão / Torrada subindo -->
+                <g class="toaster-toast">
+                  <rect x="65" y="30" width="70" height="55" rx="14" fill="#E29D52" stroke="#8A4A12" stroke-width="3" />
+                  <rect x="70" y="36" width="60" height="42" rx="10" fill="#F4C788" />
+                  <!-- Textura da torrada -->
+                  <circle cx="82" cy="55" r="3" fill="#D98A3B" />
+                  <circle cx="118" cy="55" r="3" fill="#D98A3B" />
+                  <path d="M 94 62 Q 100 68 106 62" stroke="#8A4A12" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                </g>
+
+                <!-- Corpo principal da Torradeira estilo anos 50 (curvo cromado/retro) -->
+                <rect x="35" y="75" width="130" height="95" rx="24" fill="#D8432E" stroke="#111" stroke-width="4" />
+                <!-- Painel frontal cromado -->
+                <rect x="45" y="90" width="110" height="65" rx="14" fill="#FAF5EB" stroke="#111" stroke-width="3" />
+                <!-- Abertura superior de inserção do pão -->
+                <rect x="58" y="70" width="84" height="12" rx="6" fill="#222" stroke="#111" stroke-width="3" />
+                <!-- Dial rotativo de temperatura -->
+                <circle cx="100" cy="122" r="15" fill="#333" stroke="#111" stroke-width="2.5" />
+                <line x1="100" y1="122" x2="108" y2="114" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" />
+                <!-- Alavanca lateral -->
+                <rect x="165" y="95" width="12" height="35" rx="4" fill="#444" stroke="#111" stroke-width="2.5" />
+                <circle cx="171" cy="95" r="8" fill="#111" />
+                <!-- Pés de borracha -->
+                <rect x="50" y="170" width="22" height="10" rx="3" fill="#222" />
+                <rect x="128" y="170" width="22" height="10" rx="3" fill="#222" />
+              </svg>
+            </div>
+
+            <div class="toaster-speech-bubble">
+              Até mais! // See you
+            </div>
+
+            <button id="copy-email-btn" class="copy-toast-btn" type="button">
+              📋 COPIAR E-MAIL DIRETO
+            </button>
+          </div>
+
+          <!-- Painel com Dados Reais e Links -->
+          <div class="contact-info-panel">
+            <ul class="contact-meta-list">
+              <li class="contact-meta-item">
+                <span class="contact-meta-label">[E-MAIL PESSOAL]</span>
+                <a href="mailto:rafaelsacchetto10@gmail.com" class="contact-meta-val">
+                  rafaelsacchetto10@gmail.com
+                </a>
+              </li>
+
+              <li class="contact-meta-item">
+                <span class="contact-meta-label">[TELEFONE / WHATSAPP]</span>
+                <a href="tel:+5519994372296" class="contact-meta-val">
+                  (19) 99437-2296
+                </a>
+              </li>
+
+              <li class="contact-meta-item">
+                <span class="contact-meta-label">[LOCALIZAÇÃO]</span>
+                <span class="contact-meta-val">
+                  Campinas, SP — Brasil
+                </span>
+              </li>
+            </ul>
+
+            <!-- Links com Placeholders Claros -->
+            <div class="social-links-grid">
+              <a href="#placeholder-github" class="social-btn">
+                [GITHUB // PLACEHOLDER]
+              </a>
+              <a href="#placeholder-linkedin" class="social-btn">
+                [LINKEDIN // PLACEHOLDER]
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       RODAPÉ (FOOTER)
+       ======================================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p class="footer-notice">
+        © 2026 Rafael Sacchetto · Canal 01 · Construído com HTML, CSS e JavaScript puro (ES Modules).
+      </p>
+      <span class="footer-channel-sign">
+        [FIM DE TRANSMISSÃO // SINTONIA CONCLUÍDA]
+      </span>
+    </div>
+  </footer>
+
+  <!-- Script Principal com ES Modules -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
+

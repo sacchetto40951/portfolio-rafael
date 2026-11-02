@@ -1,0 +1,1819 @@
+/**
+ * STYLES.CSS — Portfólio de Rafael Sacchetto
+ * Conceito: "Canal 01" — Transmissão Retrô anos 50 com alma de terminal dev.
+ */
+
+/* ==========================================================================
+   1. IMPORTAÇÃO DE FONTES & VARIÁVEIS DO SISTEMA
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+  /* Tipografia do sistema (máx 3 famílias) */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-sans: 'Inter', sans-serif;
+
+  /* Espaçamentos e layout */
+  --header-height: 72px;
+  --container-max: 1280px;
+  --border-radius-sm: 3px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 12px;
+  --transition-theme: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, fill 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   TEMA 1: PRETO & BRANCO [ON] (Padrão do currículo)
+   -------------------------------------------------------------------------- */
+:root[data-theme="bw"],
+:root:not([data-theme="retro"]) {
+  --bg-primary: #0a0b0d;
+  --bg-surface: #121417;
+  --bg-card: #181a1f;
+  --bg-card-hover: #1f2229;
+  
+  --text-primary: #f0f2f5;
+  --text-secondary: #9aa0a6;
+  --text-muted: #676c75;
+  
+  --accent: #ffffff;
+  --accent-alt: #cccccc;
+  --accent-contrast: #0a0b0d;
+  
+  --border-color: #262930;
+  --border-strong: #40444f;
+  --border-highlight: #ffffff;
+  
+  --tag-bg: #1e2026;
+  --tag-text: #e2e4e9;
+  
+  --tape-shell: #121316;
+  --tape-label-bg: #ececec;
+  --tape-label-text: #0f1012;
+  --tape-reel-bg: #22242a;
+  
+  --scanline-opacity: 0.04;
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* --------------------------------------------------------------------------
+   TEMA 2: PALETA RETRÔ ANOS 50 (P&B [OFF])
+   Creme #F2E8D5, Vermelho-tomate #D8432E, Verde-menta #9CCFB8, Preto-tinta #111111
+   -------------------------------------------------------------------------- */
+:root[data-theme="retro"] {
+  --bg-primary: #F2E8D5;
+  --bg-surface: #E8DCC6;
+  --bg-card: #FAF5EB;
+  --bg-card-hover: #FFFFFF;
+  
+  --text-primary: #111111;
+  --text-secondary: #4a443c;
+  --text-muted: #736b60;
+  
+  --accent: #D8432E;
+  --accent-alt: #9CCFB8;
+  --accent-contrast: #F2E8D5;
+  
+  --border-color: #111111;
+  --border-strong: #111111;
+  --border-highlight: #D8432E;
+  
+  --tag-bg: #9CCFB8;
+  --tag-text: #111111;
+  
+  --tape-shell: #1c1c1c;
+  --tape-label-bg: #FAF5EB;
+  --tape-label-text: #111111;
+  --tape-reel-bg: #D8432E;
+  
+  --scanline-opacity: 0.02;
+  --shadow-card: 6px 6px 0px #111111;
+}
+
+/* ==========================================================================
+   2. RESET & REGRAS GLOBAIS
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 20px);
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  transition: var(--transition-theme);
+  position: relative;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Textura suave de scanlines (efeito analógico CRT) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, var(--scanline-opacity)) 0px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 9999;
+}
+
+/* ==========================================================================
+   2.1 LETRAS 3D NO HOVER (INSPIRADO NO ABETO - 6.2 P0)
+   ========================================================================== */
+.char-3d {
+  display: inline-block;
+  transform-style: preserve-3d;
+  will-change: transform;
+  cursor: default;
+  /* Ajuste da linha para reduzir espaço abaixo da letra e melhorar centragem visual */
+  line-height: 0.9;
+  /* Origem da transformação no centro horizontal e ponto vertical configurável */
+  transform-origin: 50% var(--letra-pivo-y) 0;
+  position: relative; /* necessário para pseudo‑elemento de debug */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.25), color 0.2s ease;
+}
+
+.char-space {
+  display: inline;
+}
+
+/* Variável de pivô vertical para rotação das letras 3D */
+:root {
+  --letra-pivo-y: 50%;
+}
+
+/* Perspectiva necessária para o efeito 3D – aplicada aos containers que contêm letras */
+.hero-main-title,
+.section-title,
+.nav-link {
+  perspective: 600px;
+}
+
+.hero-main-title .char-3d:hover,
+.section-title .char-3d:hover {
+  color: var(--accent);
+}
+
+.intro-letter {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 50% var(--letra-pivo-y) 0;
+}
+
+/* Modo de depuração: exibe ponto vermelho no pivô visual da letra */
+body.debug-pivo .char-3d::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: red;
+  top: var(--letra-pivo-y);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Foco visível acessível */
+:focus-visible {
+  outline: 2px solid var(--border-highlight);
+  outline-offset: 3px;
+}
+
+/* Seleção de texto no estilo terminal retrô */
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Contêiner comum */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ==========================================================================
+   3. CABEÇALHO FIXO (HEADER)
+   ========================================================================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background-color: var(--bg-primary);
+  border-bottom: 2px solid var(--border-color);
+  z-index: 1000;
+  transition: var(--transition-theme);
+  backdrop-filter: blur(8px);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  gap: 16px;
+}
+
+/* Identidade visual no header */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.brand-channel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  padding: 3px 6px;
+  letter-spacing: 0.05em;
+}
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* Navegação */
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: 12px;
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 4px 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  border-bottom-color: var(--border-highlight);
+}
+
+/* Controles e utilitários da transmissão */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Relógio ao vivo de Campinas */
+.live-clock-widget {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.live-indicator {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #27ae60;
+  box-shadow: 0 0 6px #27ae60;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Botões de controle no header */
+.ctrl-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ctrl-btn:hover {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+.toggle-status {
+  opacity: 0.9;
+}
+
+.badge-notice {
+  font-size: 0.65rem;
+  opacity: 0.6;
+}
+
+/* Menu Mobile Toggle */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   4. ESTRUTURA GERAL DAS SEÇÕES & CABEÇALHOS
+   ========================================================================== */
+.main-content {
+  margin-top: var(--header-height);
+}
+
+.section {
+  padding: 100px 0;
+  border-bottom: 2px solid var(--border-color);
+  position: relative;
+}
+
+.section-header {
+  margin-bottom: 48px;
+}
+
+.section-badge {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  display: block;
+}
+
+:root[data-theme="retro"] .section-badge {
+  color: var(--accent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 680px;
+  margin-top: 12px;
+}
+
+/* ==========================================================================
+   5. SEÇÃO HERO
+   ========================================================================== */
+.hero-section {
+  padding: 70px 0 0 0;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.hero-transmission-tag {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.hero-main-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.3rem, 5.4vw, 5.4rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  text-align: left;
+  display: block;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.hero-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hero-word-space {
+  display: inline-block;
+  width: 0.25em;
+}
+
+.hero-description {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 14px 24px;
+  text-decoration: none;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px var(--border-color);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 14px 24px;
+  text-decoration: none;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-surface);
+  transform: translateY(-2px);
+}
+
+/* Hero ASCII Card / Canvas 3D Interativo */
+.hero-visual-card {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 20px;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  cursor: crosshair;
+}
+
+.hero-visual-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+}
+
+.ascii-frame {
+  font-family: 'Space Mono', 'Courier New', monospace;
+  font-size: clamp(0.48rem, 0.72vw, 0.70rem);
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  white-space: pre;
+  color: var(--text-primary);
+  overflow-x: hidden;
+  text-align: center;
+  background-color: var(--bg-card);
+  padding: 20px 8px;
+  border: 1px dashed var(--border-color);
+  user-select: none;
+  font-variant-ligatures: none;
+}
+
+.ascii-notice {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* Faixa infinita de texto (Ticker / Marquee) */
+.hero-marquee-wrap {
+  width: 100%;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  border-top: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--border-color);
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 12px 0;
+  user-select: none;
+}
+
+.hero-marquee-track {
+  display: inline-flex;
+  animation: marquee-roll 28s linear infinite;
+}
+
+.hero-marquee-wrap:hover .hero-marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-item {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.marquee-item::after {
+  content: "✦";
+  margin-left: 20px;
+  opacity: 0.7;
+}
+
+@keyframes marquee-roll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ==========================================================================
+   6. SEÇÃO 01: SOBRE MIM
+   ========================================================================== */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.about-bio-text {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+
+.about-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.spec-block {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 28px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+.spec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.spec-number {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+:root[data-theme="retro"] .spec-number {
+  color: var(--accent);
+}
+
+.spec-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.spec-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.spec-institution {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.spec-period {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.spec-status-badge {
+  display: inline-block;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border: 1px solid var(--border-color);
+}
+
+/* Lista de Idiomas */
+.lang-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lang-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.lang-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.lang-level {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background-color: var(--bg-surface);
+  padding: 2px 8px;
+  border: 1px solid var(--border-color);
+}
+
+/* ==========================================================================
+   7. SEÇÃO 02: PROJETOS (FITAS CASSETE & SIDE-SCROLL #1)
+   ========================================================================== */
+.tapes-navigation-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.tape-nav-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.tape-nav-btn {
+  font-size: 0.8rem;
+  padding: 8px 14px;
+}
+
+.tape-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.tape-counter-badge {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--accent);
+}
+
+/* Fileira horizontal com Side-Scroll (Requisito 6.3 P0) */
+.tapes-track {
+  width: 100%;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 4px 32px 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-surface);
+}
+
+.tapes-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tapes-track::-webkit-scrollbar-track {
+  background: var(--bg-surface);
+}
+
+.tapes-track::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.tapes-grid {
+  display: flex;
+  gap: 36px;
+  perspective: 1200px;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Design analógico de fita cassete com perspectiva 3D */
+.cassette-card {
+  flex: 0 0 clamp(320px, 46vw, 480px);
+  scroll-snap-align: center;
+  background-color: var(--tape-shell);
+  border: 3px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease, border-color 0.3s ease;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Virada 3D suave no hover ou foco (rotateY entre -12° e 12°) */
+.cassette-card:hover,
+.cassette-card:focus-visible {
+  transform: translateY(-8px) rotateY(-8deg) rotateX(4deg);
+  box-shadow: 14px 18px 35px rgba(0, 0, 0, 0.35);
+  border-color: var(--accent);
+}
+
+.cassette-card:nth-child(even):hover,
+.cassette-card:nth-child(even):focus-visible {
+  transform: translateY(-8px) rotateY(8deg) rotateX(4deg);
+}
+
+/* Parafusos nos cantos da fita */
+.screw {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #444;
+  border: 1px solid #111;
+}
+
+.screw-tl { top: 10px; left: 10px; }
+.screw-tr { top: 10px; right: 10px; }
+.screw-bl { bottom: 10px; left: 10px; }
+.screw-br { bottom: 10px; right: 10px; }
+
+/* Rótulo impresso da fita */
+.cassette-label {
+  background-color: var(--tape-label-bg);
+  color: var(--tape-label-text);
+  border: 2px solid #111;
+  padding: 18px;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: 20px;
+}
+
+.cassette-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-bottom: 2px solid #111;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.cassette-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.cassette-category {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: #444;
+  text-transform: uppercase;
+}
+
+/* Janela central e carretéis mecânicos da fita */
+.cassette-window {
+  background-color: #0b0c0e;
+  border: 2px solid #333;
+  border-radius: 6px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.tape-reel {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Roda dentada mecânica de alto contraste (raios e cogs visíveis) */
+.reel-cog {
+  width: 44px;
+  height: 44px;
+  transform-origin: 22px 22px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Rotação lenta contínua e autônoma sem precisar de mouse */
+.reel-cog-left {
+  animation: reel-spin-left 4.2s linear infinite;
+}
+
+.reel-cog-right {
+  animation: reel-spin-right 3.6s linear infinite;
+}
+
+@keyframes reel-spin-left {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reel-spin-right {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Aceleração visível no hover e foco */
+.cassette-card:hover .reel-cog-left,
+.cassette-card:focus-visible .reel-cog-left {
+  animation-duration: 1.1s;
+}
+
+.cassette-card:hover .reel-cog-right,
+.cassette-card:focus-visible .reel-cog-right {
+  animation-duration: 0.95s;
+}
+
+/* Ao inserir a fita no deck (clique): velocidade máxima */
+.cassette-card.tape-inserted {
+  border-color: var(--accent);
+  box-shadow: 0 0 30px rgba(216, 67, 46, 0.4);
+}
+
+.cassette-card.tape-inserted .reel-cog-left {
+  animation-duration: 0.45s !important;
+}
+
+.cassette-card.tape-inserted .reel-cog-right {
+  animation-duration: 0.4s !important;
+}
+
+.cassette-card.tape-inserted .cassette-deck-btn {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Barra de engate e status da fita */
+.cassette-deck-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cassette-deck-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cassette-deck-btn:hover {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.tape-deck-status {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.tape-film-bridge {
+  height: 8px;
+  flex: 1;
+  max-width: 90px;
+  background-color: #382415;
+  border: 1px solid #1c1109;
+}
+
+/* Pausa automática quando as fitas saem do campo de visão */
+.tapes-paused .reel-cog {
+  animation-play-state: paused !important;
+}
+
+/* Conteúdo explicativo do projeto */
+.cassette-body {
+  color: #d1d5db;
+}
+
+:root[data-theme="retro"] .cassette-body {
+  color: #FAF5EB;
+}
+
+.cassette-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.cassette-highlights {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.cassette-highlights li {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.cassette-highlights li::before {
+  content: "▸";
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+/* Tags de tecnologias */
+.cassette-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tech-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 8px;
+}
+
+.cassette-link {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+  padding: 10px 14px;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  text-decoration: none;
+  border: 2px solid #111;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.cassette-link:hover {
+  filter: brightness(1.1);
+}
+
+/* ==========================================================================
+   8. SEÇÃO 03: COMPETÊNCIAS (ESTILO OBYS - FICHA TÉCNICA)
+   ========================================================================== */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.skill-category-card {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 28px;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease;
+}
+
+.skill-category-card:hover {
+  transform: translateY(-3px);
+}
+
+.skill-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.skill-index {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   8.1 RELÓGIOS ANALÓGICOS (SEÇÃO 03) — PIVÔ CENTRAL FIXO & ANÉIS DE SCROLL
+   ========================================================================== */
+.analog-clock {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Mostrador com os 12 números e marcadores */
+.clock-dial-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 1. WRAPPER: ocupa o relógio inteiro com transform-origin: 50% 50% (Recebe SOMENTE a rotação) */
+.hand-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* 2. Ponteiro visível: posicionado do centro para cima com margin-left negativa */
+.hand-needle {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 5%;
+  height: 38%;
+  margin-left: -2.5%;
+  background-color: var(--accent);
+  border-radius: 2px 2px 0 0;
+  pointer-events: none;
+}
+
+/* Ponto central fixo: por cima dos ponteiros, sem rotação */
+.clock-center-pin {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14%;
+  height: 14%;
+  margin-top: -7%;
+  margin-left: -7%;
+  border-radius: 50%;
+  background-color: var(--accent);
+  border: 1.5px solid var(--border-color);
+  box-sizing: border-box;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.skill-category-title {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 20px;
+}
+
+.skill-items-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-item-block {
+  border-left: 2px solid var(--border-color);
+  padding-left: 14px;
+}
+
+.skill-item-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.skill-item-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   9. SEÇÃO 04: PLAYER ANALÓGICO
+   ========================================================================== */
+.player-container {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 40px;
+  box-shadow: var(--shadow-card);
+}
+
+.player-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* Vinil Analógico com Braço de Leitura */
+.vinyl-deck {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.vinyl-record {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a2a2a 20%, #111111 21%, #1f1f1f 40%, #0d0d0d 60%, #1a1a1a 80%, #050505 100%);
+  border: 4px solid #333;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+/* Animação física do vinil girando continuamente */
+.vinyl-record.is-spinning {
+  animation: vinyl-spin 1.8s linear infinite;
+}
+
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-center-label {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-align: center;
+  border: 3px solid #111;
+  pointer-events: none;
+}
+
+.vinyl-spindle {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  margin-top: 4px;
+}
+
+/* Braço mecânico do toca-discos */
+.tone-arm {
+  position: absolute;
+  top: 10px;
+  right: -8px;
+  width: 70px;
+  height: 145px;
+  border-right: 4px solid #aaa;
+  border-bottom: 4px solid #aaa;
+  transform-origin: 66px 8px;
+  transform: rotate(0deg);
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Braço deslocado para a trilha do vinil durante a reprodução */
+.tone-arm.arm-on-record {
+  transform: rotate(32deg);
+}
+
+.tone-head {
+  position: absolute;
+  bottom: -6px;
+  left: -2px;
+  width: 14px;
+  height: 22px;
+  background: #dcdcdc;
+  border: 2px solid #222;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Painel de Controles do Player */
+.player-controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.player-track-info {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 16px;
+}
+
+.player-status-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+  transition: color 0.3s ease;
+}
+
+.player-track-name {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  letter-spacing: 0.02em;
+}
+
+/* VU Meter retrô animado em tempo real */
+.vu-meter-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vu-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.vu-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.vu-bar {
+  height: 16px;
+  flex: 1;
+  background-color: var(--border-color);
+  border: 1px solid var(--border-color);
+  opacity: 0.25;
+  transform: scaleY(0.7);
+  transition: opacity 0.08s ease, transform 0.08s ease;
+}
+
+.vu-bar.active-green { background-color: #27ae60; }
+.vu-bar.active-yellow { background-color: #f39c12; }
+.vu-bar.active-red { background-color: #e74c3c; }
+
+/* Controles de reprodução interativos */
+.playback-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-player {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  padding: 12px 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-player:hover {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  transform: translateY(-2px);
+}
+
+.btn-player.is-active {
+  background-color: #27ae60;
+  color: #fff;
+  border-color: #1e8449;
+}
+
+.timecode-display {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+}
+
+.volume-control-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background-color: var(--bg-card);
+  padding: 8px 14px;
+  border: 1px solid var(--border-color);
+}
+
+.volume-slider {
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.player-notice {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   10. SEÇÃO 05: PALESTRAS & VISITAS TÉCNICAS (APENAS TEXTO, SEM VÍDEO)
+   ========================================================================== */
+.lectures-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.lectures-drag-hint {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.reset-lectures-btn {
+  font-size: 0.75rem;
+  padding: 6px 12px;
+}
+
+.lectures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  position: relative;
+}
+
+.lecture-card {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 30px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  transition: box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.lecture-card.is-dragging {
+  cursor: grabbing !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.lecture-card-header {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lecture-badge {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.lecture-stamp {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  background-color: var(--tag-bg);
+  color: var(--tag-text);
+  border: 1px solid var(--border-color);
+}
+
+.lecture-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.lecture-host {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+.lecture-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   11. SEÇÃO 06: CONTATO & TORRADEIRA
+   ========================================================================== */
+.contact-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 48px;
+  align-items: center;
+}
+
+/* Área da Torradeira Anos 50 */
+.toaster-showcase {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+
+.toaster-art {
+  width: 220px;
+  height: 220px;
+  margin-bottom: 20px;
+}
+
+.toaster-toast {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toaster-showcase:hover .toaster-toast {
+  transform: translateY(-16px);
+}
+
+.toaster-speech-bubble {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  padding: 6px 16px;
+  border: 2px solid var(--border-color);
+  margin-bottom: 12px;
+  display: inline-block;
+}
+
+.copy-toast-btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 10px 18px;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-toast-btn:hover {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Dados de contato reais */
+.contact-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.contact-meta-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-meta-item {
+  background-color: var(--bg-surface);
+  border: 2px solid var(--border-color);
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contact-meta-label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.contact-meta-val {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.contact-meta-val:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.social-links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.social-btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 12px 16px;
+  text-align: center;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+  background-color: var(--accent);
+  color: var(--accent-contrast);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   12. RODAPÉ (FOOTER)
+   ========================================================================== */
+.site-footer {
+  padding: 40px 0;
+  border-top: 2px solid var(--border-color);
+  background-color: var(--bg-surface);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-notice {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.footer-channel-sign {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   13. RESPONSIVIDADE E ACESSIBILIDADE
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .player-body {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .playback-bar {
+    justify-content: center;
+  }
+
+  .lectures-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: auto;
+  }
+  
+  .site-header {
+    position: sticky;
+  }
+
+  .header-inner {
+    flex-wrap: wrap;
+    padding: 12px 0;
+  }
+
+  .header-nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .nav-list {
+    gap: 8px;
+  }
+
+  .header-controls {
+    flex-wrap: wrap;
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .tapes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Modo Acessibilidade / Redução de Movimento */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-marquee-track {
+    animation: none;
+  }
+
+  .live-indicator {
+    animation: none;
+  }
+}
+
